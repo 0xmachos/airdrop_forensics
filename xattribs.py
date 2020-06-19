@@ -50,7 +50,7 @@ path2db = ""
 pretty_print = False
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dir', default=path,
+parser.add_argument('--dir', default=path, required=True,
                     help='path to directory to check')
 parser.add_argument('--db', default=path2db,
                     help='path to db')
