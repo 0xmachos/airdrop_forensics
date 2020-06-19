@@ -9,14 +9,16 @@ import argparse
 
 def hex_to_int(string):
     string = ''.join(reversed(string.split()))
-    return int(string,16)
+    return int(string, 16)
+
 
 def list_airdropped_files(directory):
     airdropped_files = {}
     non_aidr = []
     for file in os.listdir(directory):
         try:
-            quarantine = xattr.getxattr("{}/{}".format(directory, file), "com.apple.quarantine")
+            quarantine = xattr.getxattr(
+                "{}/{}".format(directory, file), "com.apple.quarantine")
             quarantine = quarantine.decode("utf-8")
 
             if "sharingd" in quarantine:
@@ -32,14 +34,15 @@ def list_airdropped_files(directory):
 
                 airdropped_files[quarantine.split(";")[-1]] = temp
         except Exception as error:
-            #continue;
+            # continue;
             if "Attribute not found" in str(error):
                 non_aidr.append(file)
 
             #print("ERROR: ", error)
-            continue;
+            continue
     print("Files / directories in the given directory which don't have the quarantine attribute: \n", non_aidr)
     return airdropped_files
+
 
 # feel free to complete this with your values for faster usage
 path = ""
@@ -61,7 +64,7 @@ pretty_print = args.pretty_print
 file_list = list_airdropped_files(path)
 conn = sqlite3.connect(path2db)
 conn.row_factory = sqlite3.Row
-cursor = conn.execute("SELECT LSQuarantineEventIdentifier as EventID, datetime(LSQuarantineTimeStamp + strftime('%s','2001-01-01'), 'unixepoch') as TimestampUTC, LSQuarantineSenderName as SenderName FROM LSQuarantineEvent WHERE LSQuarantineAgentName LIKE 'sharingd';");
+cursor = conn.execute("SELECT LSQuarantineEventIdentifier as EventID, datetime(LSQuarantineTimeStamp + strftime('%s','2001-01-01'), 'unixepoch') as TimestampUTC, LSQuarantineSenderName as SenderName FROM LSQuarantineEvent WHERE LSQuarantineAgentName LIKE 'sharingd';")
 
 for row in cursor:
     try:
@@ -69,7 +72,7 @@ for row in cursor:
             file_list[row[0]]["sender_name"] = row[2]
 
     except Exception as error:
-        #continue;
+        # continue;
         print("ERROR: ", error)
 
 if pretty_print == True:
