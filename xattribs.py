@@ -53,7 +53,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--dir', default=path, required=True,
                     help='path to directory to check')
 parser.add_argument('--db', default=path2db,
-                    help='path to db')
+                    help='path to QuarantineEventsV2 database')
 parser.add_argument('--pretty-print', action='store_true',
                     help='pretty print flag')
 args = parser.parse_args()
