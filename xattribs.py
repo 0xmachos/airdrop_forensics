@@ -56,12 +56,12 @@ parser.add_argument('--dir', default=path, required=True,
                     help='path to directory to check')
 parser.add_argument('--db', default=path2db,
                     help='path to QuarantineEventsV2 database')
-parser.add_argument('--pretty-print', action='store_true',
-                    help='pretty print flag')
+parser.add_argument('--raw', action='store_true',
+                    help='print raw output')
 args = parser.parse_args()
 path = args.dir
 path2db = args.db
-pretty_print = args.pretty_print
+raw = args.raw
 
 file_list = list_airdropped_files(path)
 conn = sqlite3.connect(path2db)
@@ -77,7 +77,9 @@ for row in cursor:
         # continue;
         print("ERROR: ", error)
 
-if pretty_print == True:
+if raw == True:
+    print(file_list)
+else:
     for file in file_list:
         uid = file
         print('''\nFile {}
@@ -87,5 +89,4 @@ if pretty_print == True:
                                   file_list[uid]["file_path"],
                                   file_list[uid]["download_time"],
                                   file_list[uid]["sender_name"]))
-else:
-    print(file_list)
+
