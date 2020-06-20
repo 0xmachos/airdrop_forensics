@@ -39,9 +39,10 @@ def list_airdropped_files(directory):
             if "Attribute not found" in str(error):
                 non_aidr.append(file)
 
-            #print("ERROR: ", error)
+            # print("ERROR: ", error)
             continue
-    print("Files / directories in the given directory which don't have the quarantine attribute: \n", non_aidr)
+    print("Files / directories in the given directory which don't have the\
+            quarantine attribute: \n", non_aidr)
     return airdropped_files
 
 
@@ -66,7 +67,11 @@ raw = args.raw
 file_list = list_airdropped_files(path)
 conn = sqlite3.connect(path2db)
 conn.row_factory = sqlite3.Row
-cursor = conn.execute("SELECT LSQuarantineEventIdentifier as EventID, datetime(LSQuarantineTimeStamp + strftime('%s','2001-01-01'), 'unixepoch') as TimestampUTC, LSQuarantineSenderName as SenderName FROM LSQuarantineEvent WHERE LSQuarantineAgentName LIKE 'sharingd';")
+cursor = conn.execute("SELECT LSQuarantineEventIdentifier as EventID,\
+        datetime(LSQuarantineTimeStamp + \
+        strftime('%s','2001-01-01'), 'unixepoch') as TimestampUTC,\
+        LSQuarantineSenderName as SenderName FROM LSQuarantineEvent \
+        WHERE LSQuarantineAgentName LIKE 'sharingd';")
 
 for row in cursor:
     try:
@@ -77,9 +82,7 @@ for row in cursor:
         # continue;
         print("ERROR: ", error)
 
-if raw == True:
-    print(file_list)
-else:
+if not raw:
     for file in file_list:
         uid = file
         print('''\nFile {}
@@ -89,4 +92,5 @@ else:
                                   file_list[uid]["file_path"],
                                   file_list[uid]["download_time"],
                                   file_list[uid]["sender_name"]))
-
+else:
+    print(file_list)
