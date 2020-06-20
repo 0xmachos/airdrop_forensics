@@ -47,7 +47,8 @@ def list_airdropped_files(directory):
 
 # feel free to complete this with your values for faster usage
 path = ""
-path2db = os.environ['HOME'] + "/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2"
+path2db = os.environ['HOME'] + \
+    "/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2"
 pretty_print = False
 
 parser = argparse.ArgumentParser()
